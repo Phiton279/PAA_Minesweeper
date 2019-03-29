@@ -27,8 +27,11 @@ int display(vector<vector<int> >target, vector<vector<bool> >target2, int panjan
 		{
 			if(target2[i][j]==true)
 			{
-//					printf("%d",target[i][j]);
-				printf("|-|");
+					if(target[i][j]>0)
+					printf("|%d|",target[i][j]);
+					else if(target[i][j]==0) printf("| |");
+					else printf("|B|");
+//				printf("|-|");
 			}
 			else
 			{
@@ -53,36 +56,36 @@ int display(vector<vector<int> >target, vector<vector<bool> >target2, int panjan
 	return flag;
 }
 
-void makeNumber(vector<vector<int> >&depan,int W, int H)
+void makeNumber(vector<vector<int> >&belakang,int W, int H)
 {
 	int x,y;
-	        for(x=0;x<W;x++){
-            for(y=0;y<H;y++){
-                if(depan[y][x] == -1){
+	        for(x=0;x<H;x++){
+            for(y=0;y<W;y++){
+                if(belakang[y][x] == -1){
                     if((y-1) >= 0)
-                        if(depan[y-1][x] != -1)
-                            depan[y-1][x]++;
+                        if(belakang[y-1][x] != -1)
+                            belakang[y-1][x]++;
                     if((y-1) >= 0 && (x-1) >= 0)
-                        if(depan[y-1][x-1] != -1)
-                            depan[y-1][x-1]++;
+                        if(belakang[y-1][x-1] != -1)
+                            belakang[y-1][x-1]++;
                     if((x-1) >= 0)
-                        if(depan[y][x-1] != -1)
-                            depan[y][x-1]++;
+                        if(belakang[y][x-1] != -1)
+                            belakang[y][x-1]++;
                     if((y+1) < W)
-                        if(depan[y+1][x] != -1)
-                            depan[y+1][x]++;
+                        if(belakang[y+1][x] != -1)
+                            belakang[y+1][x]++;
                     if((y+1) < W && (x+1) < H)
-                        if(depan[y+1][x+1] != -1)
-                            depan[y+1][x+1]++;
+                        if(belakang[y+1][x+1] != -1)
+                            belakang[y+1][x+1]++;
                     if((x+1) < H)
-                        if(depan[y][x+1] != -1)
-                            depan[y][x+1]++;
+                        if(belakang[y][x+1] != -1)
+                            belakang[y][x+1]++;
                     if((y-1) >= 0 && (x+1) < H)
-                        if(depan[y-1][x+1] != -1)
-                            depan[y-1][x+1]++;
+                        if(belakang[y-1][x+1] != -1)
+                            belakang[y-1][x+1]++;
                     if((y+1) < W && (x-1) >= 0)
-                        if(depan[y+1][x-1] != -1)
-                            depan[y+1][x-1]++;
+                        if(belakang[y+1][x-1] != -1)
+                            belakang[y+1][x-1]++;
                 }
             }
         }
@@ -148,7 +151,7 @@ void menu(int pilihan)
 int main()
 {
 	int pilihan=0;
-	int panjang,lebar;
+	int panjang,lebar,bom;
 	
 	
 	while(1)
@@ -172,18 +175,21 @@ int main()
 				{
 					panjang = 8;
 					lebar = 10;
+					bom = 10;
 					break;
 				}
 			case 2:
 				{
 					panjang = 16;
 					lebar = 16;
+					bom = 40;
 					break;
 				}
 			case 3:
 				{
 					panjang = 25;
 					lebar = 25;
+					bom = 99;
 					break;
 				}
 			case 4:
@@ -191,7 +197,11 @@ int main()
 					printf("ukuran (x * x) maksimal 40 : ");
 					scanf("%d",&panjang);
 					lebar = panjang;
-					
+					printf("jumlah bom : ");
+					scanf("%d",&bom);
+					if(panjang>40 || panjang < 1 || bom>(panjang*lebar)){
+						printf("gagal");
+					}
 					break;
 				}
 		
@@ -201,6 +211,8 @@ int main()
 		res=initialize(panjang,lebar);
 		vector<vector<int> > layerBelakang = res.first;
 		vector<vector<bool> > layerDepan = res.second;
+		makebomb(layerBelakang,panjang,bom);
+		makeNumber(layerBelakang,lebar,panjang);
 		menu(pilihan);
 		display(layerBelakang,layerDepan,panjang,lebar);
 		system("pause");
