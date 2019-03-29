@@ -53,6 +53,60 @@ int display(vector<vector<int> >target, vector<vector<bool> >target2, int panjan
 	return flag;
 }
 
+void makeNumber(vector<vector<int> >&depan,int W, int H)
+{
+	int x,y;
+	        for(x=0;x<W;x++){
+            for(y=0;y<H;y++){
+                if(depan[y][x] == -1){
+                    if((y-1) >= 0)
+                        if(depan[y-1][x] != -1)
+                            depan[y-1][x]++;
+                    if((y-1) >= 0 && (x-1) >= 0)
+                        if(depan[y-1][x-1] != -1)
+                            depan[y-1][x-1]++;
+                    if((x-1) >= 0)
+                        if(depan[y][x-1] != -1)
+                            depan[y][x-1]++;
+                    if((y+1) < W)
+                        if(depan[y+1][x] != -1)
+                            depan[y+1][x]++;
+                    if((y+1) < W && (x+1) < H)
+                        if(depan[y+1][x+1] != -1)
+                            depan[y+1][x+1]++;
+                    if((x+1) < H)
+                        if(depan[y][x+1] != -1)
+                            depan[y][x+1]++;
+                    if((y-1) >= 0 && (x+1) < H)
+                        if(depan[y-1][x+1] != -1)
+                            depan[y-1][x+1]++;
+                    if((y+1) < W && (x-1) >= 0)
+                        if(depan[y+1][x-1] != -1)
+                            depan[y+1][x-1]++;
+                }
+            }
+        }
+    }
+
+void makebomb(vector<vector<int> >&layerBelakang,int besarPapan, int banyakbomb)
+{
+	srand(time(NULL));
+	for(int i=0;i<banyakbomb;i++)
+	{
+		int x = rand() % besarPapan;
+		int y= rand() % besarPapan;
+		
+		if(layerBelakang[x][y]!=-1)
+		{
+			layerBelakang[x][y]=-1;
+		}
+		else
+		{
+			i--;
+		}
+	}
+}
+
 pair<vector<vector<int> >,vector<vector<bool> > > initialize (int panjang,int lebar)
 {
 	vector<vector<int> > layerBelakang;
