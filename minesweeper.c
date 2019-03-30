@@ -7,6 +7,37 @@
 
 using namespace std;
 
+void floodfill(vector<vector<int> > &back, vector<vector<bool> > &front, int x,int y,int panjang, int lebar){
+	stack<pair<int,int> > openSet;
+	//int n=16;
+	openSet.push(make_pair(x,y));
+	openSet.size();
+	
+	while(!openSet.empty()){
+		int i= openSet.top().first;
+		int j= openSet.top().second;
+		openSet.pop();
+		if(front[i][j] == true){
+			front[i][j] = false;
+			if(back[i][j]==0)		
+			{
+				if(i-1>=0){
+					if(j-1>=0) openSet.push(make_pair(i-1,j-1));
+					openSet.push(make_pair(i-1,j));
+					if(j+1<lebar) openSet.push(make_pair(i-1,j+1));
+				}
+				if(j-1>=0) openSet.push(make_pair(i,j-1));
+				if(j+1<lebar) openSet.push(make_pair(i,j+1));
+				if(i+1<panjang){
+					if(j-1>=0) openSet.push(make_pair(i+1,j-1));
+					openSet.push(make_pair(i+1,j));
+					if(j+1<panjang) openSet.push(make_pair(i+1,j+1));
+				}
+			}
+		}
+	}
+}
+
 int display(vector<vector<int> >target, vector<vector<bool> >target2, int panjang, int lebar)
 {
 	int flag=0;
