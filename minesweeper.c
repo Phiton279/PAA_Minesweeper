@@ -13,14 +13,14 @@ void floodfill(vector<vector<int> > &back, vector<vector<bool> > &front, int x,i
 	//int n=16;
 	openSet.push(make_pair(x,y));
 	openSet.size();
-	
+
 	while(!openSet.empty()){
 		int i= openSet.top().first;
 		int j= openSet.top().second;
 		openSet.pop();
 		if(front[i][j] == true){
 			front[i][j] = false;
-			if(back[i][j]==0)		
+			if(back[i][j]==0)
 			{
 				if(i-1>=0){
 					if(j-1>=0) openSet.push(make_pair(i-1,j-1));
@@ -41,9 +41,9 @@ void floodfill(vector<vector<int> > &back, vector<vector<bool> > &front, int x,i
 
 int display(vector<vector<int> >target, vector<vector<bool> >target2, int panjang, int lebar)
 {
-    int flag=0;
-    int n=0;
-    printf("X/Y\t");
+	int flag=0;
+	int n=0;
+	printf("X/Y\t");
     while(n<panjang){
         if(n<10)
         printf(" %d ",n);
@@ -59,10 +59,6 @@ int display(vector<vector<int> >target, vector<vector<bool> >target2, int panjan
 		{
 			if(target2[i][j]==true)
 			{
-					if(target[i][j]>0)
-					printf("|%d|",target[i][j]);
-					else if(target[i][j]==0) printf("| |");
-					else printf("|B|");
 				printf("|-|");
 			}
 			else
@@ -79,7 +75,7 @@ int display(vector<vector<int> >target, vector<vector<bool> >target2, int panjan
 				else
 				{
 					printf("|%d|",target[i][j]);
-				}	
+				}
 			}
 
 		}
@@ -91,7 +87,7 @@ int display(vector<vector<int> >target, vector<vector<bool> >target2, int panjan
 void makeNumber(vector<vector<int> >&belakang,int W, int H)
 {
 	int x,y;
-	        for(x=0;x<H;x++){
+    for(x=0;x<H;x++){
             for(y=0;y<W;y++){
                 if(belakang[y][x] == -1){
                     if((y-1) >= 0)
@@ -130,7 +126,7 @@ void makebomb(vector<vector<int> >&layerBelakang,int besarPapan, int banyakbomb)
 	{
 		int x = rand() % besarPapan;
 		int y= rand() % besarPapan;
-		
+
 		if(layerBelakang[x][y]!=-1)
 		{
 			layerBelakang[x][y]=-1;
@@ -146,7 +142,7 @@ pair<vector<vector<int> >,vector<vector<bool> > > initialize (int panjang,int le
 {
 	vector<vector<int> > layerBelakang;
 	vector<vector<bool> > layerDepan;
-	
+
 	for(int i=0;i<lebar;i++)
 	{
 		vector<int> layerBelakangTemp;
@@ -158,7 +154,7 @@ pair<vector<vector<int> >,vector<vector<bool> > > initialize (int panjang,int le
 		}
 		layerBelakang.push_back(layerBelakangTemp);
 		layerDepan.push_back(layerDepanTemp);
-		
+
 		layerBelakangTemp.clear();
 		layerDepanTemp.clear();
 	}
@@ -182,12 +178,12 @@ void menu(int pilihan)
 
 int main()
 {
-	int pilihan=0;
 	int panjang,lebar,bom;
-	
-	
+    int pilihan, gagal;
 	while(1)
 	{
+        gagal=0;
+        pilihan=0;
 		menu(pilihan);
 		printf("Pilih menu :\n");
 		printf("1. Beginner\n");
@@ -229,26 +225,84 @@ int main()
 					printf("ukuran (x * x) maksimal 40 : ");
 					scanf("%d",&panjang);
 					lebar = panjang;
-					printf("jumlah bom : ");
+					printf("jumlah bom (minimal 1) : ");
 					scanf("%d",&bom);
-					if(panjang>40 || panjang < 1 || bom>(panjang*lebar)){
-						printf("gagal");
+					if(panjang>40 || panjang < 1 || bom>(panjang*lebar) || bom < 1){
+						printf("gagal\n");
+						gagal=1;
+						system("pause");
+						system("cls");
 					}
+
 					break;
 				}
-		
+
 		}
-		
+
 		pair<vector<vector<int> >,vector<vector<bool> > > res;
 		res=initialize(panjang,lebar);
 		vector<vector<int> > layerBelakang = res.first;
 		vector<vector<bool> > layerDepan = res.second;
 		makebomb(layerBelakang,panjang,bom);
 		makeNumber(layerBelakang,lebar,panjang);
-		menu(pilihan);
-		display(layerBelakang,layerDepan,panjang,lebar);
-		system("pause");
-		system("cls");
+		int x,y,flag;
+		while(1)
+		{
+            if(gagal==1) break;
+			flag=0;
+			system("cls");
+			menu(pilihan);
+			flag=display(layerBelakang,layerDepan,panjang,lebar);
+			if(flag==1)
+			{
+				int i,j;
+				for(i=0;i<lebar;i++){
+	                for(j=0;j<panjang;j++){
+	                    if(layerBelakang[i][j]==-1){
+	                        layerDepan[i][j]=false;
+	                    }
+	                }
+	            }
+	            system("cls");
+	            menu(pilihan);
+	            flag=display(layerBelakang,layerDepan,panjang,lebar);
+				printf("Maaf anda kalah\n");
+				system("pause");
+				system("cls");
+				break;
+			}
+			else if(flag==0)
+			{
+				int i,j,counter;
+				counter=0;
+				for(i=0;i<lebar;i++){
+	                for(j=0;j<panjang;j++){
+	                    if(layerDepan[i][j]==true){
+	                        counter++;
+	                    }
+	                }
+	            }
+	            if(counter == bom)
+	            {
+					printf("Selamat anda menang\n");
+					system("pause");
+					system("cls");
+					break;
+				}
+
+			}
+			printf("Masukkan koordinat x > ");
+			scanf("%d",&y);
+			printf("Masukkan koordinat y > ");
+			scanf("%d",&x);
+			floodfill(layerBelakang,layerDepan,x,y,panjang,lebar);
+//			system("cls");
+		}
+
+
+
 	}
-return 0;
+	system("cls");
+	printf("Terimakasih telah bermain ^_^\n");
+	return 0;
 }
