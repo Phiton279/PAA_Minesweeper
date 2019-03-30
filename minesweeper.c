@@ -41,9 +41,9 @@ void floodfill(vector<vector<int> > &back, vector<vector<bool> > &front, int x,i
 
 int display(vector<vector<int> >target, vector<vector<bool> >target2, int panjang, int lebar)
 {
-	int flag=0;
-	int n=0;
-	printf("X/Y\t");
+    int flag=0;
+    int n=0;
+    printf("X/Y\t");
     while(n<panjang){
         if(n<10)
         printf(" %d ",n);
@@ -63,7 +63,7 @@ int display(vector<vector<int> >target, vector<vector<bool> >target2, int panjan
 					printf("|%d|",target[i][j]);
 					else if(target[i][j]==0) printf("| |");
 					else printf("|B|");
-//				printf("|-|");
+				printf("|-|");
 			}
 			else
 			{
