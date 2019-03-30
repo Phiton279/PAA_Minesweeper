@@ -4,6 +4,7 @@
 #include<time.h>
 #include<stdlib.h>
 #include<stack>
+#include<cstdio>
 
 using namespace std;
 
